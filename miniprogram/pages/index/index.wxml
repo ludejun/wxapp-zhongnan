@@ -1,0 +1,40 @@
+<!--index.wxml-->
+<view class="container">
+
+  <!-- 用户 openid -->
+  <view class="userinfo">
+    <button 
+      open-type="getUserInfo" 
+      bindgetuserinfo="onGetUserInfo"
+      class="userinfo-avatar"
+      style="background-image: url({{avatarUrl}})"
+    ></button>
+    <view>
+      <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
+    </view>
+  </view>
+
+
+  <!-- 上传图片 -->
+  <view class="uploader">
+    <view class="uploader-text" bindtap="doUpload">
+      <text>上传图片</text>
+    </view>
+    <view class="uploader-container" wx:if="{{imgUrl}}">
+      <image class="uploader-image" src="{{imgUrl}}" mode="aspectFit" bindtap="previewImg"></image>
+    </view>
+  </view>
+
+
+ 
+  <view class="type-container">
+    <label>型材规格（种类/米）：</label>
+    <input value="6" type="digit"></input>
+    <!-- <input value="6" type="digit"></input> -->
+
+    <label>下料尺寸（米）</label><label>数量（个）</label>
+    <input type="digit" placeholder="输入下料长度"></input> X <input type='number' value="2"></input><button>+</button>
+  </view>
+   
+
+</view>
