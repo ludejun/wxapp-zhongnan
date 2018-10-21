@@ -121,12 +121,87 @@ Page({
     })
   },
 
-  productionApply: function() {
-    let totalLength = 0;
-    this.data.list.forEach((item) => totalLength+= item);
+  function productionApply() {
+    // 原材料总长度
+    let totalLength = sumLength(list);
     console.log(1111, totalLength);
+    
+    // // 各规格的根数
+    // let x = 0;
+    // let y = 0;
+    // let z = 0;
+    // const typeNumber = [x, y, z];
+    // if (typeArr.length === 1) {
+    //   y = 0;
+    //   z = 0;
+    // } else if (typeArr.length === 2) {
+    //   z = 0;
+    // }
 
-  },
+    // 先给料排个序，先下长的
+    const _list = list.sort((a, b) => a - b <0).concat([]);
+    // 规格只有1种
+    // const typeArr = this.data.typeArr;
+    if (totalLength > 0) {
+      // 材料的最大根数
+      const maxNumber = Math.ceil(totalLength / typeArr[0]);
+      
+      // 每一种下料的可能
+      let sample = [];
+      let totalSamples = [];
+
+      // 只需要一根材料
+      if (maxNumber === 1) {
+        sample = [list];
+        totalSamples = [sample];
+        return totalSamples;
+      } else {
+        // 不止一根，先将最长的放第一根料上
+        // 再从大到小分配其他下料
+        _list.shift();
+        const _array = _list;
+        let group = getGroup(_array);
+        for (let i = 0; i < group.length; i++) {
+          totalSamples.push([group[i].concat(list[0]), getResetArray(_array, group[i])]);
+        }
+        console.log(totalSamples);
+      }
+      
+
+    }
+  }
+
+  function sumLength(arr) {
+    if(Array.isArray(arr)) {
+      let totalLength = 0;
+      arr.forEach((item) => totalLength+= item);
+      return totalLength;
+    }
+    return;
+  }
+
+  function getGroup(data, index = 0, group = []) {
+    if (index === 0) {
+      group.push([]);
+    }
+    const need_apply = new Array();
+    for (let i = 0; i < group.length; i++) {
+      need_apply.push(group[i].concat([data[index]]));
+    }
+    group = group.concat(need_apply);
+    if (index === data.length -1) {
+      return group;
+    }
+    return getGroup(data, index + 1, group);
+  }
+
+  function getResetArray(oriArray, targetArray) {
+    const result = [...oriArray];
+    for (let i = 0; i < targetArray.length; i++) {
+      result.splice(result.findIndex((item) => item === targetArray[i]), 1);
+    }
+    return result;
+  }
 
 
 })
