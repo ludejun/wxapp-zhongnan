@@ -9,7 +9,7 @@ Page({
     takeSession: false,
     requestResult: '',
     typeArr: [6.00],
-    list: [1.2, 1.3, 1.4, 1.5],
+    list: [1.2, 1.3, 1.4, 1.5, 1.2, 1.3, 1.4, 1.5],
   },
 
   onLoad: function() {
@@ -121,9 +121,9 @@ Page({
     })
   },
 
-  function productionApply() {
+  productionApply() {
     // 原材料总长度
-    let totalLength = sumLength(list);
+    let totalLength = this.sumLength(this.data.list);
     console.log(1111, totalLength);
     
     // // 各规格的根数
@@ -138,12 +138,12 @@ Page({
     //   z = 0;
     // }
 
+    const typeArr = this.data.typeArr;
     // 先给料排个序，先下长的
-    const _list = list.sort((a, b) => a - b <0).concat([]);
+    const _list = this.data.list.sort((a, b) => a - b <0).concat([]);
     // 规格只有1种
-    // const typeArr = this.data.typeArr;
     if (totalLength > 0) {
-      // 材料的最大根数
+      // 材料的最大根数，简略计算，实际下面最大根数除1以外，均需在maxNumber上+1简算
       const maxNumber = Math.ceil(totalLength / typeArr[0]);
       
       // 每一种下料的可能
@@ -152,35 +152,52 @@ Page({
 
       // 只需要一根材料
       if (maxNumber === 1) {
-        sample = [list];
+        sample = [this.data.list];
         totalSamples = [sample];
         return totalSamples;
       } else {
-        // 不止一根，先将最长的放第一根料上
-        // 再从大到小分配其他下料
-        _list.shift();
+        // _list.shift();
         const _array = _list;
-        let group = getGroup(_array);
+        let group = this.getGroup(_array);
+        // 从这个group中任选maxNumber个数组，再找出其中涵盖所有list，并且长度符合要求的解
+        // 如上面找不到解，需要任选maxNumber+1个数组，重复求解
+        
+
+
         for (let i = 0; i < group.length; i++) {
-          totalSamples.push([group[i].concat(list[0]), getResetArray(_array, group[i])]);
+          totalSamples.push([group[i].concat(this.data.list[0]), this.getResetArray(_array, group[i])]);
         }
         console.log(totalSamples);
       }
+
+      // 去除totalSamples中某一根超过规格长度的
+      for (let j = 0; j < totalSamples.length; j ++) {
+        for (let k = 0; k < totalSamples[j].length; k++) {
+          if (this.sumLength(totalSamples[j][k]) > typeArr[0]) {
+            totalSamples.splice(j, 1);
+          }
+        }
+      }
+      console.log(totalSamples);
+
+      // 每一种下料的材料利用率
+
       
 
     }
-  }
+  },
 
-  function sumLength(arr) {
+  sumLength(arr) {
     if(Array.isArray(arr)) {
       let totalLength = 0;
       arr.forEach((item) => totalLength+= item);
       return totalLength;
     }
     return;
-  }
+  },
 
-  function getGroup(data, index = 0, group = []) {
+  // 获取数组的全排列组合
+  getGroup(data, index = 0, group = []) {
     if (index === 0) {
       group.push([]);
     }
@@ -192,16 +209,41 @@ Page({
     if (index === data.length -1) {
       return group;
     }
-    return getGroup(data, index + 1, group);
-  }
+    return this.getGroup(data, index + 1, group);
+  },
 
-  function getResetArray(oriArray, targetArray) {
+  // 得到剩余数组
+  getResetArray(oriArray, targetArray) {
     const result = [...oriArray];
     for (let i = 0; i < targetArray.length; i++) {
       result.splice(result.findIndex((item) => item === targetArray[i]), 1);
     }
     return result;
+  },
+
+  // 从数组中任选不同的n项进行组合
+  getSamplesFromGroup(group, n = 2, start = 0, result = []) {
+    for (let i = start; i < group.length; i++) {
+
+    }
+  },
+
+
+  function combine_increase(arr, start, result, count, NUM)
+{
+  for (let i = start; i < arr.length + 1 - count; i++)
+  {
+    result[count - 1] = i;
+    if (count - 1 == 0)
+    {
+      for (let j = NUM - 1; j >= 0; j--) {
+        console.log(arr[result[j]]);
+      }
+      console.log('-');
+    }
+    else {
+      combine_increase(arr, i + 1, result, count - 1, NUM);
+    }
   }
-
-
+}
 })
