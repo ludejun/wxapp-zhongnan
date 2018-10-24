@@ -161,13 +161,16 @@ Page({
         let group = this.getGroup(_array);
         // 从这个group中任选maxNumber个数组，再找出其中涵盖所有list，并且长度符合要求的解
         // 如上面找不到解，需要任选maxNumber+1个数组，重复求解
-        
-
-
-        for (let i = 0; i < group.length; i++) {
-          totalSamples.push([group[i].concat(this.data.list[0]), this.getResetArray(_array, group[i])]);
-        }
+        totalSamples = this.getSamplesFromGroup(group, 0, [], maxNumber, maxNumber);
         console.log(totalSamples);
+        for (let j = 0; j < totalSamples.length; j++) {
+          if (totalSamples[j])
+        }
+
+        // for (let i = 0; i < group.length; i++) {
+        //   totalSamples.push([group[i].concat(this.data.list[0]), this.getResetArray(_array, group[i])]);
+        // }
+        // console.log(totalSamples);
       }
 
       // 去除totalSamples中某一根超过规格长度的
@@ -221,29 +224,41 @@ Page({
     return result;
   },
 
+  // // 从数组中任选不同的n项进行组合
+  // getSamplesFromGroup(group, n = 2, start = 0, result = []) {
+  //   for (let i = start; i < group.length; i++) {
+
+  //   }
+  // },
+
   // 从数组中任选不同的n项进行组合
-  getSamplesFromGroup(group, n = 2, start = 0, result = []) {
-    for (let i = start; i < group.length; i++) {
-
-    }
-  },
-
-
-  function combine_increase(arr, start, result, count, NUM)
-{
-  for (let i = start; i < arr.length + 1 - count; i++)
-  {
-    result[count - 1] = i;
-    if (count - 1 == 0)
-    {
-      for (let j = NUM - 1; j >= 0; j--) {
-        console.log(arr[result[j]]);
+  /*
+    @param arr 原始大数组
+    @param start 起始点，从什么位置开始取，默认为0
+    @param result 遍历存储最终结果的地方
+    @param cuont 遍历辅助索引值
+    @param NUM 取数的数量，默认为1
+  */
+  getSamplesFromGroup(arr, start = 0, result = [], count, NUM = 1) {
+    for (let i = start; i < arr.length + 1 - count; i++) {
+      result[count - 1] = i;
+      if (count - 1 == 0) {
+        const item = [];
+        for (let j = NUM - 1; j >= 0; j--) {
+          item.push(arr[result[j]]);
+        }
+        console.log(item);
+        result.push(item);
+      } else {
+        this.getSamplesFromGroup(arr, i + 1, result, count - 1, NUM);
       }
-      console.log('-');
     }
-    else {
-      combine_increase(arr, i + 1, result, count - 1, NUM);
+    const _result = [];
+    for (let k = 0; k < result.length; k++) {
+      if (Array.isArray(result[k]) && result[k].length === NUM) {
+        _result.push(result[k]);
+      }
     }
-  }
-}
+    return _result;
+  },
 })
