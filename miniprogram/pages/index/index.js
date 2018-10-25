@@ -158,14 +158,33 @@ Page({
       } else {
         // _list.shift();
         const _array = _list;
-        let group = this.getGroup(_array);
+        const group = this.getGroup(_array);
+        console.log(5555, group);
+
+        // 从group中剔除某一项长度超规格的
+        const _group = [];
+        group.forEach((item) => {
+          if (this.sumLength(item) <= typeArr[0]) {
+            _group.push(item);
+          }
+        });
+        console.log(2222, _group);
         // 从这个group中任选maxNumber个数组，再找出其中涵盖所有list，并且长度符合要求的解
+        // maxNumber项合起来应与全部下料相同
         // 如上面找不到解，需要任选maxNumber+1个数组，重复求解
-        totalSamples = this.getSamplesFromGroup(group, 0, [], maxNumber, maxNumber);
-        console.log(totalSamples);
+        totalSamples = this.getSamplesFromGroup(_group, 0, [], maxNumber, maxNumber);
+        console.log(3333, totalSamples);
+        const _totalSample = [];
         for (let j = 0; j < totalSamples.length; j++) {
-          if (totalSamples[j])
+          let tempArr = [];
+          totalSamples[j].forEach((item, index) => {
+            tempArr = tempArr.concat(item);
+            index === (maxNumber - 1) && tempArr.sort((a, b) => a - b <0);
+          });
+          console.log(4444, tempArr, _list);
+          _list.length === tempArr.length && JSON.stringify(_list) === JSON.stringify(tempArr) && _totalSample.push(totalSamples[j]);
         }
+        console.log(66666, _totalSample);
 
         // for (let i = 0; i < group.length; i++) {
         //   totalSamples.push([group[i].concat(this.data.list[0]), this.getResetArray(_array, group[i])]);
@@ -173,15 +192,15 @@ Page({
         // console.log(totalSamples);
       }
 
-      // 去除totalSamples中某一根超过规格长度的
-      for (let j = 0; j < totalSamples.length; j ++) {
-        for (let k = 0; k < totalSamples[j].length; k++) {
-          if (this.sumLength(totalSamples[j][k]) > typeArr[0]) {
-            totalSamples.splice(j, 1);
-          }
-        }
-      }
-      console.log(totalSamples);
+      // // 去除totalSamples中某一根超过规格长度的
+      // for (let j = 0; j < totalSamples.length; j ++) {
+      //   for (let k = 0; k < totalSamples[j].length; k++) {
+      //     if (this.sumLength(totalSamples[j][k]) > typeArr[0]) {
+      //       totalSamples.splice(j, 1);
+      //     }
+      //   }
+      // }
+      // console.log(totalSamples);
 
       // 每一种下料的材料利用率
 
@@ -209,7 +228,8 @@ Page({
       need_apply.push(group[i].concat([data[index]]));
     }
     group = group.concat(need_apply);
-    if (index === data.length -1) {
+    if (index === data.length - 1) {
+      group.shift(0, 1);
       return group;
     }
     return this.getGroup(data, index + 1, group);
@@ -224,7 +244,7 @@ Page({
     return result;
   },
 
-  // // 从数组中任选不同的n项进行组合
+  // // 从数组中任选不同的n项进行组合，并对输出做限制
   // getSamplesFromGroup(group, n = 2, start = 0, result = []) {
   //   for (let i = start; i < group.length; i++) {
 
@@ -247,7 +267,7 @@ Page({
         for (let j = NUM - 1; j >= 0; j--) {
           item.push(arr[result[j]]);
         }
-        console.log(item);
+        // console.log(item);
         result.push(item);
       } else {
         this.getSamplesFromGroup(arr, i + 1, result, count - 1, NUM);
@@ -259,6 +279,7 @@ Page({
         _result.push(result[k]);
       }
     }
+    result = null;
     return _result;
   },
 })
