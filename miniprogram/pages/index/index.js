@@ -181,26 +181,10 @@ Page({
             tempArr = tempArr.concat(item);
             index === (maxNumber - 1) && tempArr.sort((a, b) => a - b <0);
           });
-          console.log(4444, tempArr, _list);
           _list.length === tempArr.length && JSON.stringify(_list) === JSON.stringify(tempArr) && _totalSample.push(totalSamples[j]);
         }
         console.log(66666, _totalSample);
-
-        // for (let i = 0; i < group.length; i++) {
-        //   totalSamples.push([group[i].concat(this.data.list[0]), this.getResetArray(_array, group[i])]);
-        // }
-        // console.log(totalSamples);
       }
-
-      // // 去除totalSamples中某一根超过规格长度的
-      // for (let j = 0; j < totalSamples.length; j ++) {
-      //   for (let k = 0; k < totalSamples[j].length; k++) {
-      //     if (this.sumLength(totalSamples[j][k]) > typeArr[0]) {
-      //       totalSamples.splice(j, 1);
-      //     }
-      //   }
-      // }
-      // console.log(totalSamples);
 
       // 每一种下料的材料利用率
 
