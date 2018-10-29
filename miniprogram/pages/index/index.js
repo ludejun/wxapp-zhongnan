@@ -8,8 +8,8 @@ Page({
     logged: false,
     takeSession: false,
     requestResult: '',
-    typeArr: [6.00],
-    list: [1.2, 1.3, 1.4, 1.5, 1.2, 1.3, 1.4, 1.5],
+    typeArr: [600],
+    list: [120, 130, 140, 150, 120, 130, 140, 150],
   },
 
   onLoad: function() {
@@ -141,11 +141,12 @@ Page({
     const typeArr = this.data.typeArr;
     // 先给料排个序，先下长的
     const _list = this.data.list.sort((a, b) => a - b <0).concat([]);
-    // 将规格从小到大排序，优先用规格最小的算极限情况
+    // 将规格从小到大排序
     typeArr.sort((a, b) => a - b);
     // 规格只有1种
     if (totalLength > 0) {
       // 材料的最大根数，简略计算，实际下面最大根数除1以外，均需在maxNumber上+1简算
+      const minNumber = Math.ceil(totalLength / typeArr[typeArr.length - 1]);
       const maxNumber = Math.ceil(totalLength / typeArr[0]);
       
       // 每一种下料的可能
@@ -174,13 +175,20 @@ Page({
         // 从这个group中任选maxNumber个数组，再找出其中涵盖所有list，并且长度符合要求的解
         // maxNumber项合起来应与全部下料相同
         // 如上面找不到解，需要任选maxNumber+1个数组，重复求解
-        totalSamples = this.getTotalSample(_group, maxNumber, _list);
-
-        // 任选maxNumber个无解，需要maxNumber+1根材料
-        if (totalSamples.length === 0) {
-          totalSamples = this.getTotalSample(_group, maxNumber + 1, _list);
-          console.log(7777, totalSamples)
+        for (let n = minNumber; n <= maxNumber+1; n++) {
+          totalSamples = this.getTotalSample(_group, n, _list);
+          if (totalSamples.length === 0) {
+            continue;
+          } else {
+            break;
+          }
         }
+        // totalSamples = this.getTotalSample(_group, maxNumber, _list);
+        // // 任选maxNumber个无解，需要maxNumber+1根材料
+        // if (totalSamples.length === 0) {
+        //   totalSamples = this.getTotalSample(_group, maxNumber + 1, _list);
+        //   console.log(7777, totalSamples)
+        // }
       }
 
       // 每一种下料的材料利用率
@@ -188,7 +196,7 @@ Page({
       for (let i = 0; i < totalSamples.length; i++) {
         rate[i] = [];
         for (let j =0; j < totalSamples[i].length; j++) {
-          rate[i].push(this.sumLength(totalSamples[i][j])/typeArr[0]);
+          rate[i].push(this.sumLength(totalSamples[i][j])/this.getSampleType(totalSamples[i][j], typeArr));
         }
         rate[i].sort((a, b) => b - a);
         // 将前length-1个使用率加和，放入最后一个位置；将原位置标示放到倒数第二个位置，便于查找下料方法
@@ -200,8 +208,12 @@ Page({
       console.log(99999, rate);
       // 则rate[0]的倒数第二个标示位即为totalSamples中最佳下料方法
       console.log(0, totalSamples[rate[0][rate[0].length - 2]]);
-      return totalSamples[rate[0][rate[0].length - 2]];
-
+      // return totalSamples[rate[0][rate[0].length - 2]];
+      
+      this.setData({
+        finalSample: totalSamples[rate[0][rate[0].length - 2]],
+        finalType: 
+      });
     }
   },
 
@@ -220,6 +232,19 @@ Page({
     }
     console.log(66666, _totalSample);
     return _totalSample;
+  },
+
+  // 某一种下料方式对应规格材料及材料使用率
+  // typeArr默认需从小到大排列
+  getSampleType(sampleArr, typeArr) {
+    const len = this.sumLength(sampleArr);
+    for (let i = 0; i < typeArr.length -1; i++) {
+      if (i === 0 && len < typeArr[0]) {
+        return typeArr[0];
+      } else if (len > typeArr[i] && len <= typeArr[i+1]){
+        return typeArr[i+1];
+      }
+    }
   },
 
   sumLength(arr) {
