@@ -141,6 +141,8 @@ Page({
     const typeArr = this.data.typeArr;
     // 先给料排个序，先下长的
     const _list = this.data.list.sort((a, b) => a - b <0).concat([]);
+    // 将规格从小到大排序，优先用规格最小的算极限情况
+    typeArr.sort((a, b) => a - b);
     // 规格只有1种
     if (totalLength > 0) {
       // 材料的最大根数，简略计算，实际下面最大根数除1以外，均需在maxNumber上+1简算
@@ -151,7 +153,7 @@ Page({
       let totalSamples = [];
 
       // 只需要一根材料
-      if (maxNumber === 1) {
+      if (this.sumLength(this.data.list) < typeArr[typeArr.length - 1]) {
         sample = [this.data.list];
         totalSamples = [sample];
         return totalSamples;
@@ -164,7 +166,7 @@ Page({
         // 从group中剔除某一项长度超规格的
         const _group = [];
         group.forEach((item) => {
-          if (this.sumLength(item) <= typeArr[0]) {
+          if (this.sumLength(item) <= typeArr[typeArr.length - 1]) {
             _group.push(item);
           }
         });
@@ -172,25 +174,52 @@ Page({
         // 从这个group中任选maxNumber个数组，再找出其中涵盖所有list，并且长度符合要求的解
         // maxNumber项合起来应与全部下料相同
         // 如上面找不到解，需要任选maxNumber+1个数组，重复求解
-        totalSamples = this.getSamplesFromGroup(_group, 0, [], maxNumber, maxNumber);
-        console.log(3333, totalSamples);
-        const _totalSample = [];
-        for (let j = 0; j < totalSamples.length; j++) {
-          let tempArr = [];
-          totalSamples[j].forEach((item, index) => {
-            tempArr = tempArr.concat(item);
-            index === (maxNumber - 1) && tempArr.sort((a, b) => a - b <0);
-          });
-          _list.length === tempArr.length && JSON.stringify(_list) === JSON.stringify(tempArr) && _totalSample.push(totalSamples[j]);
+        totalSamples = this.getTotalSample(_group, maxNumber, _list);
+
+        // 任选maxNumber个无解，需要maxNumber+1根材料
+        if (totalSamples.length === 0) {
+          totalSamples = this.getTotalSample(_group, maxNumber + 1, _list);
+          console.log(7777, totalSamples)
         }
-        console.log(66666, _totalSample);
       }
 
       // 每一种下料的材料利用率
-
-      
+      const rate = [];
+      for (let i = 0; i < totalSamples.length; i++) {
+        rate[i] = [];
+        for (let j =0; j < totalSamples[i].length; j++) {
+          rate[i].push(this.sumLength(totalSamples[i][j])/typeArr[0]);
+        }
+        rate[i].sort((a, b) => b - a);
+        // 将前length-1个使用率加和，放入最后一个位置；将原位置标示放到倒数第二个位置，便于查找下料方法
+        rate[i].push(i, this.sumLength(rate[i]) - rate[i][rate[i].length -1]);
+      }
+      console.log(88888, rate);
+      // 找出里面前length-1个使用率最高的，最后一根剩余材料可以作为库存
+      rate.sort((a, b) =>  b[b.length-1] - a[a.length-1]);
+      console.log(99999, rate);
+      // 则rate[0]的倒数第二个标示位即为totalSamples中最佳下料方法
+      console.log(0, totalSamples[rate[0][rate[0].length - 2]]);
+      return totalSamples[rate[0][rate[0].length - 2]];
 
     }
+  },
+
+  // 获取任选n个解法数量
+  getTotalSample (group, number, list) {
+    const totalSamples = this.getSamplesFromGroup(group, 0, [], number, number);
+    console.log(3333, totalSamples);
+    const _totalSample = [];
+    for (let j = 0; j < totalSamples.length; j++) {
+      let tempArr = [];
+      totalSamples[j].forEach((item, index) => {
+        tempArr = tempArr.concat(item);
+        index === (number - 1) && tempArr.sort((a, b) => a - b <0);
+      });
+      list.length === tempArr.length && JSON.stringify(list) === JSON.stringify(tempArr) && _totalSample.push(totalSamples[j]);
+    }
+    console.log(66666, _totalSample);
+    return _totalSample;
   },
 
   sumLength(arr) {
