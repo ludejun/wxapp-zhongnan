@@ -8,7 +8,7 @@ Page({
     logged: false,
     takeSession: false,
     requestResult: '',
-    typeArr: [600],
+    typeArr: [600, 540],
     list: [120, 130, 140, 150, 120, 130, 140, 150],
   },
 
@@ -143,7 +143,7 @@ Page({
     const _list = this.data.list.sort((a, b) => a - b <0).concat([]);
     // 将规格从小到大排序
     typeArr.sort((a, b) => a - b);
-    // 规格只有1种
+    
     if (totalLength > 0) {
       // 材料的最大根数，简略计算，实际下面最大根数除1以外，均需在maxNumber上+1简算
       const minNumber = Math.ceil(totalLength / typeArr[typeArr.length - 1]);
@@ -153,7 +153,7 @@ Page({
       let sample = [];
       let totalSamples = [];
 
-      // 只需要一根材料
+      // 看是否只需要一根材料
       if (this.sumLength(this.data.list) < typeArr[typeArr.length - 1]) {
         sample = [this.data.list];
         totalSamples = [sample];
@@ -212,8 +212,9 @@ Page({
       
       this.setData({
         finalSample: totalSamples[rate[0][rate[0].length - 2]],
-        finalType: 
+        finalType: totalSamples[rate[0][rate[0].length - 2]].map((item) => this.getSampleType(item, typeArr))
       });
+      console.log(this.data.finalSample, this.data.finalType);
     }
   },
 
@@ -238,10 +239,12 @@ Page({
   // typeArr默认需从小到大排列
   getSampleType(sampleArr, typeArr) {
     const len = this.sumLength(sampleArr);
+
+    if (len < typeArr[0] || typeArr.length === 1) {
+      return typeArr[0];
+    }
     for (let i = 0; i < typeArr.length -1; i++) {
-      if (i === 0 && len < typeArr[0]) {
-        return typeArr[0];
-      } else if (len > typeArr[i] && len <= typeArr[i+1]){
+      if (len > typeArr[i] && len <= typeArr[i+1]){
         return typeArr[i+1];
       }
     }
