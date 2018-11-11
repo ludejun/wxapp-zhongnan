@@ -8,7 +8,7 @@ Page({
     logged: false,
     takeSession: false,
     requestResult: '',
-    typeArr: [600, 540],
+    typeArr: [650, 600, 540],
     list: [120, 130, 140, 150, 120, 130, 140, 150],
   },
 
@@ -119,6 +119,10 @@ Page({
         console.error(e)
       }
     })
+  },
+
+  onTypeDeleteClick (e) {
+    console.log(e.target.dataset.no);
   },
 
   productionApply() {

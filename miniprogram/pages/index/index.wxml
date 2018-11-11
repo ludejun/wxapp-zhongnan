@@ -29,7 +29,10 @@
  
   <view class="type-container">
     <label>型材规格（种类/米）：</label>
-    <input value="6" type="digit"></input>
+    <view wx:for="{{typeArr}}" class="type-input">
+      <input value="{{item}}" type="digit"></input>
+      <view data-no="{{index}}" bindtap="onTypeDeleteClick">-</view>
+    </view>
     <!-- <input value="6" type="digit"></input> -->
 
     <label>下料尺寸（米）</label><label>数量（个）</label>

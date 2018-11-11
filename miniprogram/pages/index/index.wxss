@@ -135,3 +135,27 @@ page {
   line-height: 36rpx;
   word-break: break-all;
 }
+
+.type-container {
+  width: 90%;
+  padding: 10rpx;
+}
+.type-input input{
+  display: inline-block;
+  height: 60rpx;
+  line-height: 60rpx;
+  border: 1rpx solid #eee;
+  padding-left: 10rpx;
+  border-radius: 8rpx;
+  min-height: 60rpx;
+}
+.type-input view{
+  border:1rpx solid #888;
+  border-radius:100%;
+  width:50rpx;
+  height:50rpx;
+  text-align:center;
+  box-shadow:1rpx;
+  line-height:50rpx;
+  float:right;
+}
