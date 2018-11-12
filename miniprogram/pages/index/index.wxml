@@ -28,15 +28,18 @@
 
  
   <view class="type-container">
-    <label>型材规格（种类/米）：</label>
+    <label>型材规格（种类/cm）：</label>
     <view wx:for="{{typeArr}}" class="type-input">
-      <input value="{{item}}" type="digit"></input>
+      <input value="{{item}}" type="number"></input>
       <view data-no="{{index}}" bindtap="onTypeDeleteClick">-</view>
     </view>
     <!-- <input value="6" type="digit"></input> -->
 
-    <label>下料尺寸（米）</label><label>数量（个）</label>
-    <input type="digit" placeholder="输入下料长度"></input> X <input type='number' value="2"></input><button>+</button>
+    <label>下料尺寸（cm）：</label><label style="margin-left: 100rpx;">数量（根）：</label>
+    <view class="sample-container">
+      <input type="number" placeholder="输入下料长度" bindinput="onSampleInput" data-no="0" confirm-type="done"></input><text>X</text><input type='number' value="2" bindinput="onSampleNumInput" data-no="0"></input>
+    </view>
+    <button>确认下料</button>
   </view>
    
 

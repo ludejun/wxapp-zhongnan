@@ -139,8 +139,9 @@ page {
 .type-container {
   width: 90%;
   padding: 10rpx;
+  font-size:14px;
 }
-.type-input input{
+.type-input input, .sample-container input{
   display: inline-block;
   height: 60rpx;
   line-height: 60rpx;
@@ -148,6 +149,7 @@ page {
   padding-left: 10rpx;
   border-radius: 8rpx;
   min-height: 60rpx;
+  width: 40%;
 }
 .type-input view{
   border:1rpx solid #888;
@@ -158,4 +160,7 @@ page {
   box-shadow:1rpx;
   line-height:50rpx;
   float:right;
+}
+.sample-container text{
+  margin:0 10rpx;
 }

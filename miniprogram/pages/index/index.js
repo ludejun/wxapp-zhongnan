@@ -123,6 +123,19 @@ Page({
 
   onTypeDeleteClick (e) {
     console.log(e.target.dataset.no);
+    const typeArr = this.data.typeArr;
+    typeArr.splice(e.target.dataset.no, 1);
+    this.setData({
+      typeArr: typeArr
+    });
+  },
+
+  onSampleInput (e) {
+    console.log(e.detail.value, e.target.dataset.no);
+    
+  },
+  onSampleNumInput (e) {
+    console.log(e.detail.value, e.target.dataset.no);
   },
 
   productionApply() {
