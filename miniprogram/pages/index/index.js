@@ -136,18 +136,31 @@ Page({
     });
   },
   onSampleAddClick (e) {
+    console.log(this.data.list);
+    const list = this.data.list.concat([{ 'value': null, 'num': 2 }]);
     this.setData({
-      list: this.data.list.push({ 'value': null, 'num': 2 })
+      list: list
     });
+    console.log(this.data);
   },
 
   onSampleInput (e) {
     console.log(e.detail.value, e.target.dataset.no);
     this.data.list[e.target.dataset.no].value = parseInt(e.detail.value);
+    const list = this.data.list.concat([]);
+    list[e.target.dataset.no].value = parseInt(e.detail.value);
+    this.setData({
+      list: list
+    });
   },
   onSampleNumInput (e) {
     console.log(e.detail.value, e.target.dataset.no);
     this.data.list[e.target.dataset.no].num = parseInt(e.detail.value);
+    const list = this.data.list.concat([]);
+    list[e.target.dataset.no].num = parseInt(e.detail.value);
+    this.setData({
+      list: list
+    });
   },
 
   productionApply() {
