@@ -9,7 +9,7 @@ Page({
     takeSession: false,
     requestResult: '',
     typeArr: [650, 600, 540],
-    list: [120, 130, 140, 150, 120, 130, 140, 150],
+    list: [{'value': null, 'num': 2}],
   },
 
   onLoad: function() {
@@ -35,9 +35,7 @@ Page({
           })
         }
       }
-    }),
-
-    this.productionApply();
+    });
   },
 
   onGetUserInfo: function(e) {
@@ -129,18 +127,39 @@ Page({
       typeArr: typeArr
     });
   },
+  onSampleDeleteClick (e) {
+    console.log(e.target.dataset.no);
+    const list = this.data.list;
+    list.splice(e.target.dataset.no, 1);
+    this.setData({
+      list: list
+    });
+  },
+  onSampleAddClick (e) {
+    this.setData({
+      list: this.data.list.push({ 'value': null, 'num': 2 })
+    });
+  },
 
   onSampleInput (e) {
     console.log(e.detail.value, e.target.dataset.no);
-    
+    this.data.list[e.target.dataset.no].value = parseInt(e.detail.value);
   },
   onSampleNumInput (e) {
     console.log(e.detail.value, e.target.dataset.no);
+    this.data.list[e.target.dataset.no].num = parseInt(e.detail.value);
   },
 
   productionApply() {
+    // 延展原材料成一维数字数组
+    const list = [];
+    for (let i = 0; i < this.data.list.length; i++) {
+      if (this.data.list[i].value && this.data.list[i].num) {
+        list.push(...new Array(this.data.list[i].num).fill(this.data.list[i].value));
+      }
+    }
     // 原材料总长度
-    let totalLength = this.sumLength(this.data.list);
+    let totalLength = this.sumLength(list);
     console.log(1111, totalLength);
     
     // // 各规格的根数
@@ -157,7 +176,7 @@ Page({
 
     const typeArr = this.data.typeArr;
     // 先给料排个序，先下长的
-    const _list = this.data.list.sort((a, b) => a - b <0).concat([]);
+    const _list = list.sort((a, b) => a - b <0).concat([]);
     // 将规格从小到大排序
     typeArr.sort((a, b) => a - b);
     
@@ -171,8 +190,8 @@ Page({
       let totalSamples = [];
 
       // 看是否只需要一根材料
-      if (this.sumLength(this.data.list) < typeArr[typeArr.length - 1]) {
-        sample = [this.data.list];
+      if (this.sumLength(list) < typeArr[typeArr.length - 1]) {
+        sample = [list];
         totalSamples = [sample];
         return totalSamples;
       } else {
