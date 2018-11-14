@@ -46,12 +46,12 @@
     <button bindtap="productionApply">确认下料</button>
     <view class="result-container" wx:if="{{finalType}}">
       <label>排料结果：</label>
-      <view wx:for="{{finalType}}" wx:key="index">
-        <text>{{}} X {{}}</text>
+      <view wx:for="{{finalSummary}}" wx:key="index">
+        <text>{{item.type}} X {{item.num}}</text>
       </view>
       <label>详细下料：</label>
       <view wx:for="{{finalSample}}" wx:key="index">
-        <text>{{index+1}}：{{item}}</text>
+        <text>{{finalType[index]}}：{{item}}</text>
       </view>
     </view>
   </view>

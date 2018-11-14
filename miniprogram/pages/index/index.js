@@ -262,7 +262,9 @@ Page({
       this.setData({
         finalSample: totalSamples[rate[0][rate[0].length - 2]],
         finalType: totalSamples[rate[0][rate[0].length - 2]].map((item) => this.getSampleType(item, typeArr)),
-        finalSummary: this.data.finalType.
+      });
+      this.setData({
+        finalSummary: this.getArrayDup(this.data.finalType),
       });
       console.log(this.data.finalSample, this.data.finalType);
     }
@@ -372,5 +374,25 @@ Page({
     }
     result = null;
     return _result;
+  },
+
+  // 计算数组中重复个数
+  getArrayDup (arr) {
+    const result = [];
+    for(let i = 0; i < arr.length; i++) {
+      if (i === 0) {
+        result.push({'type': arr[0], 'num': 1});
+      } else {
+        let flag = false;
+        result.forEach((item, index) => {
+          if (item.type === arr[i]) {
+            item.num++;
+            flag = true;
+          }
+        });
+        !flag && result.push({ 'type': arr[i], 'num': 1 });
+      }
+    }
+    return result;
   },
 })
