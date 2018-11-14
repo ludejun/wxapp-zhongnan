@@ -44,14 +44,14 @@
       <view data-no="{{index}}" bindtap="onSampleAddClick" class="process-button" wx:if="{{index === list.length -1}}">+</view>
     </view>
     <button bindtap="productionApply">确认下料</button>
-    <view class="result-container">
+    <view class="result-container" wx:if="{{finalType}}">
       <label>排料结果：</label>
-      <view wx:for="finalType">
-
+      <view wx:for="{{finalType}}" wx:key="index">
+        <text>{{}} X {{}}</text>
       </view>
       <label>详细下料：</label>
-      <view wx:for="finalSample">
-        <text>{{index+1}}：{{finalSample[index]}}</text>
+      <view wx:for="{{finalSample}}" wx:key="index">
+        <text>{{index+1}}：{{item}}</text>
       </view>
     </view>
   </view>

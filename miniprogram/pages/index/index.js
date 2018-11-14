@@ -10,6 +10,8 @@ Page({
     requestResult: '',
     typeArr: [650, 600, 540],
     list: [{'value': null, 'num': 2}],
+    finalSample: null,
+    finalType: null,
   },
 
   onLoad: function() {
@@ -136,12 +138,10 @@ Page({
     });
   },
   onSampleAddClick (e) {
-    console.log(this.data.list);
     const list = this.data.list.concat([{ 'value': null, 'num': 2 }]);
     this.setData({
       list: list
     });
-    console.log(this.data);
   },
 
   onSampleInput (e) {
@@ -261,7 +261,8 @@ Page({
       
       this.setData({
         finalSample: totalSamples[rate[0][rate[0].length - 2]],
-        finalType: totalSamples[rate[0][rate[0].length - 2]].map((item) => this.getSampleType(item, typeArr))
+        finalType: totalSamples[rate[0][rate[0].length - 2]].map((item) => this.getSampleType(item, typeArr)),
+        finalSummary: this.data.finalType.
       });
       console.log(this.data.finalSample, this.data.finalType);
     }
@@ -289,7 +290,7 @@ Page({
   getSampleType(sampleArr, typeArr) {
     const len = this.sumLength(sampleArr);
 
-    if (len < typeArr[0] || typeArr.length === 1) {
+    if (len <= typeArr[0] || typeArr.length === 1) {
       return typeArr[0];
     }
     for (let i = 0; i < typeArr.length -1; i++) {
