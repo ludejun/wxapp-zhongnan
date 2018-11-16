@@ -1,0 +1,33 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="type-container">
+    <label>型材规格（种类/cm）：</label>
+    <view wx:for="{{typeArr}}" wx:key="{{index}}" class="type-input">
+      <input value="{{item}}" type="number"></input>
+      <view data-no="{{index}}" bindtap="onTypeDeleteClick" class="process-button">-</view>
+    </view>
+    <!-- <input value="6" type="digit"></input> -->
+
+    <label>下料尺寸（cm）：</label><label style="margin-left: 100rpx;">数量（根）：</label>
+    <view class="sample-container" wx:for="{{list}}" wx:key="{{index}}">
+      <input type="number" placeholder="输入下料长度" bindinput="onSampleInput" data-no="{{index}}" placeholder-style="font-size: 18rpx;" value="{{item.value}}"></input>
+      <text>X</text>
+      <input type='number' value="{{item.num}}" bindinput="onSampleNumInput" data-no="{{index}}"></input>
+      <view data-no="{{index}}" bindtap="onSampleDeleteClick" class="process-button" wx:if="{{index < list.length -1}}">-</view>
+      <view data-no="{{index}}" bindtap="onSampleAddClick" class="process-button" wx:if="{{index === list.length -1}}">+</view>
+    </view>
+    <button bindtap="productionApply">确认下料</button>
+    <view class="result-container" wx:if="{{finalType}}">
+      <label>排料结果：</label>
+      <view wx:for="{{finalSummary}}" wx:key="index">
+        <text>{{item.type}} X {{item.num}}</text>
+      </view>
+      <label>详细下料：</label>
+      <view wx:for="{{finalSample}}" wx:key="index">
+        <text>{{finalType[index]}}：{{item}}</text>
+      </view>
+    </view>
+  </view>
+   
+
+</view>

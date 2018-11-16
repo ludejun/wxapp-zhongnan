@@ -2,7 +2,7 @@
 <view class="container">
 
   <!-- 用户 openid -->
-  <view class="userinfo">
+  <!-- <view class="userinfo">
     <button 
       open-type="getUserInfo" 
       bindgetuserinfo="onGetUserInfo"
@@ -12,49 +12,48 @@
     <view>
       <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
     </view>
-  </view>
+  </view> -->
 
 
   <!-- 上传图片 -->
-  <view class="uploader">
+  <!-- <view class="uploader">
     <view class="uploader-text" bindtap="doUpload">
       <text>上传图片</text>
     </view>
     <view class="uploader-container" wx:if="{{imgUrl}}">
       <image class="uploader-image" src="{{imgUrl}}" mode="aspectFit" bindtap="previewImg"></image>
     </view>
+  </view> -->
+
+  <view class="shops-container">
+    <view class="shop-item" wx:for="{{shops}}" wx:key="{{item.des}}">
+      <image class="shop-img" src="{{item.img}}"></image>
+      <view class="shop-des">{{item.des}}</view>
+    </view>
+  </view>
+  <view class="shops-container">
+    <view class="shop-item" wx:for="{{shops2}}" wx:key="{{item.des}}">
+      <image class="shop-img" src="{{item.img}}"></image>
+      <view class="shop-des">{{item.des}}</view>
+    </view>
   </view>
 
-
+  <view class='phone-container'>
+    <image src="/images/order_info_phone.png"></image>
+    <view style="margin-left: 30rpx;">
+      <view style="font-size: 28rpx;">详情请咨询（欢迎点击拨打）：</view>
+      <view style="font-size: 32rpx; color: #FB4E44;">  +86 130 1546 2480</view>
+      <view style="font-size: 32rpx; color: #FB4E44;">  +86 155 3617 7517</view>
+    </view>
+  </view>
+  <view class='phone-container'>
+    <image src="/images/loc.png" style="height: 100rpx;"></image>
+    <view style="margin-left: 30rpx;">
+      
+    </view>
+  </view>
  
-  <view class="type-container">
-    <label>型材规格（种类/cm）：</label>
-    <view wx:for="{{typeArr}}" wx:key="{{index}}" class="type-input">
-      <input value="{{item}}" type="number"></input>
-      <view data-no="{{index}}" bindtap="onTypeDeleteClick" class="process-button">-</view>
-    </view>
-    <!-- <input value="6" type="digit"></input> -->
-
-    <label>下料尺寸（cm）：</label><label style="margin-left: 100rpx;">数量（根）：</label>
-    <view class="sample-container" wx:for="{{list}}" wx:key="{{index}}">
-      <input type="number" placeholder="输入下料长度" bindinput="onSampleInput" data-no="{{index}}" placeholder-style="font-size: 18rpx;" value="{{item.value}}"></input>
-      <text>X</text>
-      <input type='number' value="{{item.num}}" bindinput="onSampleNumInput" data-no="{{index}}"></input>
-      <view data-no="{{index}}" bindtap="onSampleDeleteClick" class="process-button" wx:if="{{index < list.length -1}}">-</view>
-      <view data-no="{{index}}" bindtap="onSampleAddClick" class="process-button" wx:if="{{index === list.length -1}}">+</view>
-    </view>
-    <button bindtap="productionApply">确认下料</button>
-    <view class="result-container" wx:if="{{finalType}}">
-      <label>排料结果：</label>
-      <view wx:for="{{finalSummary}}" wx:key="index">
-        <text>{{item.type}} X {{item.num}}</text>
-      </view>
-      <label>详细下料：</label>
-      <view wx:for="{{finalSample}}" wx:key="index">
-        <text>{{finalType[index]}}：{{item}}</text>
-      </view>
-    </view>
-  </view>
+  
    
 
 </view>

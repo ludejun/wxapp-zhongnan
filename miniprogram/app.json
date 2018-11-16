@@ -7,13 +7,43 @@
     "pages/databaseGuide/databaseGuide",
     "pages/addFunction/addFunction",
     "pages/deployFunctions/deployFunctions",
-    "pages/chooseLib/chooseLib"
+    "pages/chooseLib/chooseLib",
+    "pages/tools/tools",
+    "pages/suggest/suggest"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "云开发 QuickStart",
-    "navigationBarTextStyle": "black"
+    "navigationBarTitleText": "中南门窗",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#999",
+    "backgroundColor": "#fafafa",
+    "selectedColor": "#333",
+    "borderStyle": "white",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index",
+        "iconPath": "images/tabs/home.png",
+        "selectedIconPath": "images/tabs/home-active.png"
+      },
+      {
+        "text": "推荐",
+        "pagePath": "pages/suggest/suggest",
+        "iconPath": "images/tabs/orders.png",
+        "selectedIconPath": "images/tabs/orders-active.png"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/tools/tools",
+        "iconPath": "images/tabs/user.png",
+        "selectedIconPath": "images/tabs/user-active.png"
+      }
+    ],
+    "position": "bottom"
   }
 }

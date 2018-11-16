@@ -1,38 +1,12 @@
-//index.js
-const app = getApp()
-
 Page({
   data: {
-    avatarUrl: './user-unlogin.png',
-    userInfo: {},
-    logged: false,
-    takeSession: false,
-    requestResult: '',
-    shops: [{
-      "des": '断桥铝',
-      "img": '/images/shops/dq.jpeg',
-    }, {
-        "des": '塑钢门窗',
-        "img": '/images/shops/sg.jpeg',
-      }, {
-        "des": '铝合金门窗',
-        "img": '/images/shops/lhj.jpg',
-      }],
-    shops2: [
-      {
-        "des": '隔断',
-        "img": '/images/shops/gd.jpg',
-      }, {
-        "des": '阳光房',
-        "img": '/images/shops/yg.jpeg',
-      }, {
-        "des": '高级纱窗',
-        "img": '/images/shops/sc.jpg',
-      }
-    ]
+    typeArr: [650, 600, 540],
+    list: [{ 'value': null, 'num': 2 }],
+    finalSample: null,
+    finalType: null,
   },
 
-  onLoad: function() {
+  onLoad: function () {
     if (!wx.cloud) {
       wx.redirectTo({
         url: '../chooseLib/chooseLib',
@@ -58,7 +32,7 @@ Page({
     });
   },
 
-  onGetUserInfo: function(e) {
+  onGetUserInfo: function (e) {
     if (!this.logged && e.detail.userInfo) {
       this.setData({
         logged: true,
@@ -68,7 +42,7 @@ Page({
     }
   },
 
-  onGetOpenid: function() {
+  onGetOpenid: function () {
     // 调用云函数
     wx.cloud.callFunction({
       name: 'login',
@@ -103,7 +77,7 @@ Page({
         })
 
         const filePath = res.tempFilePaths[0]
-        
+
         // 上传图片
         const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
         wx.cloud.uploadFile({
@@ -115,7 +89,7 @@ Page({
             app.globalData.fileID = res.fileID
             app.globalData.cloudPath = cloudPath
             app.globalData.imagePath = filePath
-            
+
             wx.navigateTo({
               url: '../storageConsole/storageConsole'
             })
@@ -139,7 +113,7 @@ Page({
     })
   },
 
-  onTypeDeleteClick (e) {
+  onTypeDeleteClick(e) {
     console.log(e.target.dataset.no);
     const typeArr = this.data.typeArr;
     typeArr.splice(e.target.dataset.no, 1);
@@ -147,7 +121,7 @@ Page({
       typeArr: typeArr
     });
   },
-  onSampleDeleteClick (e) {
+  onSampleDeleteClick(e) {
     console.log(e.target.dataset.no);
     const list = this.data.list;
     list.splice(e.target.dataset.no, 1);
@@ -155,16 +129,16 @@ Page({
       list: list
     });
   },
-  onSampleAddClick (e) {
+  onSampleAddClick(e) {
     const list = this.data.list.concat([{ 'value': null, 'num': 2 }]);
     this.setData({
       list: list
     });
   },
 
-  onSampleInput (e) {
+  onSampleInput(e) {
     console.log(e.detail.value, e.target.dataset.no);
-    if (parseInt(e.detail.value) > Math.max.apply(null,this.data.typeArr)) {
+    if (parseInt(e.detail.value) > Math.max.apply(null, this.data.typeArr)) {
       wx.showModal({
         title: '输入错误',
         showCancel: false,
@@ -180,9 +154,9 @@ Page({
         list: list
       });
     }
-    
+
   },
-  onSampleNumInput (e) {
+  onSampleNumInput(e) {
     console.log(e.detail.value, e.target.dataset.no);
     this.data.list[e.target.dataset.no].num = parseInt(e.detail.value);
     const list = this.data.list.concat([]);
@@ -203,7 +177,7 @@ Page({
     // 原材料总长度
     let totalLength = this.sumLength(list);
     console.log(1111, totalLength);
-    
+
     // // 各规格的根数
     // let x = 0;
     // let y = 0;
@@ -218,15 +192,15 @@ Page({
 
     const typeArr = this.data.typeArr;
     // 先给料排个序，先下长的
-    const _list = list.sort((a, b) => a - b <0).concat([]);
+    const _list = list.sort((a, b) => a - b < 0).concat([]);
     // 将规格从小到大排序
     typeArr.sort((a, b) => a - b);
-    
+
     if (totalLength > 0) {
       // 材料的最大根数，简略计算，实际下面最大根数除1以外，均需在maxNumber上+1简算
       const minNumber = Math.ceil(totalLength / typeArr[typeArr.length - 1]);
       const maxNumber = Math.ceil(totalLength / typeArr[0]);
-      
+
       // 每一种下料的可能
       let sample = [];
       let totalSamples = [];
@@ -253,7 +227,7 @@ Page({
         // 从这个group中任选maxNumber个数组，再找出其中涵盖所有list，并且长度符合要求的解
         // maxNumber项合起来应与全部下料相同
         // 如上面找不到解，需要任选maxNumber+1个数组，重复求解
-        for (let n = minNumber; n <= maxNumber+1; n++) {
+        for (let n = minNumber; n <= maxNumber + 1; n++) {
           totalSamples = this.getTotalSample(_group, n, _list);
           if (totalSamples.length === 0) {
             continue;
@@ -273,21 +247,21 @@ Page({
       const rate = [];
       for (let i = 0; i < totalSamples.length; i++) {
         rate[i] = [];
-        for (let j =0; j < totalSamples[i].length; j++) {
-          rate[i].push(this.sumLength(totalSamples[i][j])/this.getSampleType(totalSamples[i][j], typeArr));
+        for (let j = 0; j < totalSamples[i].length; j++) {
+          rate[i].push(this.sumLength(totalSamples[i][j]) / this.getSampleType(totalSamples[i][j], typeArr));
         }
         rate[i].sort((a, b) => b - a);
         // 将前length-1个使用率加和，放入最后一个位置；将原位置标示放到倒数第二个位置，便于查找下料方法
-        rate[i].push(i, this.sumLength(rate[i]) - rate[i][rate[i].length -1]);
+        rate[i].push(i, this.sumLength(rate[i]) - rate[i][rate[i].length - 1]);
       }
       console.log(88888, rate);
       // 找出里面前length-1个使用率最高的，最后一根剩余材料可以作为库存
-      rate.sort((a, b) =>  b[b.length-1] - a[a.length-1]);
+      rate.sort((a, b) => b[b.length - 1] - a[a.length - 1]);
       console.log(99999, rate);
       // 则rate[0]的倒数第二个标示位即为totalSamples中最佳下料方法
       console.log(0, totalSamples[rate[0][rate[0].length - 2]]);
       // return totalSamples[rate[0][rate[0].length - 2]];
-      
+
       this.setData({
         finalSample: totalSamples[rate[0][rate[0].length - 2]],
         finalType: totalSamples[rate[0][rate[0].length - 2]].map((item) => this.getSampleType(item, typeArr)),
@@ -300,7 +274,7 @@ Page({
   },
 
   // 获取任选n个解法数量
-  getTotalSample (group, number, list) {
+  getTotalSample(group, number, list) {
     const totalSamples = this.getSamplesFromGroup(group, 0, [], number, number);
     console.log(3333, totalSamples);
     const _totalSample = [];
@@ -308,7 +282,7 @@ Page({
       let tempArr = [];
       totalSamples[j].forEach((item, index) => {
         tempArr = tempArr.concat(item);
-        index === (number - 1) && tempArr.sort((a, b) => a - b <0);
+        index === (number - 1) && tempArr.sort((a, b) => a - b < 0);
       });
       list.length === tempArr.length && JSON.stringify(list) === JSON.stringify(tempArr) && _totalSample.push(totalSamples[j]);
     }
@@ -324,17 +298,17 @@ Page({
     if (len <= typeArr[0] || typeArr.length === 1) {
       return typeArr[0];
     }
-    for (let i = 0; i < typeArr.length -1; i++) {
-      if (len > typeArr[i] && len <= typeArr[i+1]){
-        return typeArr[i+1];
+    for (let i = 0; i < typeArr.length - 1; i++) {
+      if (len > typeArr[i] && len <= typeArr[i + 1]) {
+        return typeArr[i + 1];
       }
     }
   },
 
   sumLength(arr) {
-    if(Array.isArray(arr)) {
+    if (Array.isArray(arr)) {
       let totalLength = 0;
-      arr.forEach((item) => totalLength+= item);
+      arr.forEach((item) => totalLength += item);
       return totalLength;
     }
     return;
@@ -406,11 +380,11 @@ Page({
   },
 
   // 计算数组中重复个数
-  getArrayDup (arr) {
+  getArrayDup(arr) {
     const result = [];
-    for(let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
       if (i === 0) {
-        result.push({'type': arr[0], 'num': 1});
+        result.push({ 'type': arr[0], 'num': 1 });
       } else {
         let flag = false;
         result.forEach((item, index) => {
