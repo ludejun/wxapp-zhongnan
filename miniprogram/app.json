@@ -17,7 +17,7 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "中南门窗",
     "navigationBarTextStyle": "black",
-    "enablePullDownRefresh": true
+    "enablePullDownRefresh": false
   },
   "tabBar": {
     "color": "#999",

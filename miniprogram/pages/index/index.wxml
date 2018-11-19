@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="container">
+<!-- <view class="container"> -->
 
   <!-- 用户 openid -->
   <!-- <view class="userinfo">
@@ -30,30 +30,43 @@
       <image class="shop-img" src="{{item.img}}"></image>
       <view class="shop-des">{{item.des}}</view>
     </view>
-  </view>
-  <view class="shops-container">
+  <!-- </view>
+  <view class="shops-container"> 
     <view class="shop-item" wx:for="{{shops2}}" wx:key="{{item.des}}">
       <image class="shop-img" src="{{item.img}}"></image>
       <view class="shop-des">{{item.des}}</view>
-    </view>
+    </view> -->
   </view>
 
   <view class='phone-container'>
     <image src="/images/order_info_phone.png"></image>
-    <view style="margin-left: 30rpx;">
+    <view style="margin-left: 30rpx;flex:1;" bindtap='onPhoneClick'>
       <view style="font-size: 28rpx;">详情请咨询（欢迎点击拨打）：</view>
-      <view style="font-size: 32rpx; color: #FB4E44;">  +86 130 1546 2480</view>
-      <view style="font-size: 32rpx; color: #FB4E44;">  +86 155 3617 7517</view>
+      <view style="font-size: 32rpx; color: #FB4E44;" data-phone="13015462480">  +86 130 1546 2480</view>
+      <view style="font-size: 32rpx; color: #FB4E44;" data-phone="15536177517">  +86 155 3617 7517</view>
     </view>
   </view>
-  <view class='phone-container'>
-    <image src="/images/loc.png" style="height: 100rpx;"></image>
-    <view style="margin-left: 30rpx;">
-      
+  <view class='phone-container' style="padding-left: 0rpx;">
+    <!-- <image src="/images/loc.png" style="height: 100rpx;"></image> -->
+    <view style="height: 200rpx;width: 100%;">
+      <map longitude="113.1394475021" latitude="36.1785748275" scale="16" markers="{{markers}}"></map>
+    </view>
+  </view>
+
+  <view class='item-list' wx:for="{{itemList}}">
+    <view class="item-image">
+      <image src="{{item.img}}"></image>
+    </view>
+    <view class="item-info">
+      <view><text class="item-title">{{item.title}}</text></view>
+      <view class="item-desc">品牌：{{item.brand}}</view>
+      <view class="item-desc">颜色：{{item.color}}</view>
+      <view class="item-desc">类型：{{item.type}}</view>
+      <view class="item-desc">玻璃：{{item.glass}}</view><view class="item-price">¥<text>{{item.price}}</text>/平起</view>
     </view>
   </view>
  
   
    
 
-</view>
+<!-- </view> -->

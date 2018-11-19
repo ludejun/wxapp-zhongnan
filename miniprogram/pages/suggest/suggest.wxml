@@ -1,2 +1,23 @@
 <!--pages/suggest/suggest.wxml-->
-<text>pages/suggest/suggest.wxml</text>
+<view>
+  <swiper autoplay="{{true}}" style="height: 600rpx;">
+    <swiper-item wx:for="{{background}}">
+      <image src="{{item}}" class="slide-image" mode="aspectFill"/>
+    </swiper-item>
+  </swiper>
+</view>
+
+<view class='code-container'>
+  <view>推荐码：</view>
+  <view style="color: #FB4E44; font-weight: bold;">{{code}}</view>
+</view>
+
+<view class='introduction-container'>
+  <text class="title" style="font-size: 32rpx;">使用说明：\n</text>
+  <text>1. 本推荐码为商家给老客户推荐新客户，并成交后使用。\n</text>
+  <text>2. 若新客户持本推荐码到店，并最终成交；此推荐码拥有者将获得<text class="title">实际新客户工程款3%</text>的权利。\n</text>
+  <text>3. 老客户核销/拿到3%回馈方法：新客户向商家打声招呼后，老客户微信上向商家展示原推荐码截图，商家微信转账。或者到店支取。\n</text>
+  <text>4. 本推荐码可以反复使用，推荐越多，拥有本码的老客户获得回报越多。请老客户妥善保管截图，核销使用。\n</text>
+  <text>5. 商家拥有对虚假推荐码、异常邀请码等情况不予核销的权利。\n</text>
+  <text>6. 中南门窗拥有对本活动的最终解释权。\n</text>
+</view>

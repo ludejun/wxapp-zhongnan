@@ -113,6 +113,14 @@ Page({
     })
   },
 
+  onTypeChange(e) {
+    console.log(e);
+    const typeArr = this.data.typeArr;
+    typeArr[e.target.dataset.no] = parseInt(e.detail.value);
+    this.setData({
+      typeArr: typeArr
+    });
+  },
   onTypeDeleteClick(e) {
     console.log(e.target.dataset.no);
     const typeArr = this.data.typeArr;
@@ -207,9 +215,15 @@ Page({
 
       // 看是否只需要一根材料
       if (this.sumLength(list) < typeArr[typeArr.length - 1]) {
-        sample = [list];
+        sample = _list;
         totalSamples = [sample];
-        return totalSamples;
+        this.setData({
+          finalSample: totalSamples,
+          finalType: [this.getSampleType(sample, typeArr)],
+          finalSummary: [{ 'type': this.getSampleType(sample, typeArr), 'num': 1}]
+        });
+
+        return;
       } else {
         // _list.shift();
         const _array = _list;

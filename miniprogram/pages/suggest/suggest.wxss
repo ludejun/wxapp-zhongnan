@@ -1,1 +1,26 @@
 /* pages/suggest/suggest.wxss */
+.slide-image {
+  width: 100%;
+  height: 600rpx;
+}
+
+.code-container {
+  position: absolute;
+  height: 100rpx;
+  width: 100%;
+  color: #333;
+  font-size: 32rpx;
+  top: 250rpx;
+  background: rgba(180, 180, 180, 0.8);
+  text-align: center;
+}
+.introduction-container {
+  margin: 40rpx 10rpx 60rpx 10rpx;
+  font-size: 24rpx;
+  color: #333;
+  line-height: 40rpx;
+}
+.title {
+  color: #FB4E44;
+  font-weight: bold;
+}
