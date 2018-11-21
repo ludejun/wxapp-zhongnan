@@ -322,7 +322,7 @@ Page({
   sumLength(arr) {
     if (Array.isArray(arr)) {
       let totalLength = 0;
-      arr.forEach((item) => totalLength += item);
+      arr.forEach((item) => totalLength += Number(item));
       return totalLength;
     }
     return;
@@ -335,8 +335,11 @@ Page({
     }
     const need_apply = new Array();
     for (let i = 0; i < group.length; i++) {
-      need_apply.push(group[i].concat([data[index]]));
+      if (this.sumLength(group[i].concat([data[index]])) <= Math.max.apply(null, this.data.typeArr)) {
+        need_apply.push(group[i].concat([data[index]]));
+      }
     }
+    
     group = group.concat(need_apply);
     if (index === data.length - 1) {
       group.shift(0, 1);
