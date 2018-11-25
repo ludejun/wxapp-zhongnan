@@ -230,19 +230,19 @@ Page({
         const group = this.getGroup(_array);
         console.log(5555, group);
 
-        // 从group中剔除某一项长度超规格的
-        const _group = [];
-        group.forEach((item) => {
-          if (this.sumLength(item) <= typeArr[typeArr.length - 1]) {
-            _group.push(item);
-          }
-        });
-        console.log(2222, _group);
+        // // 从group中剔除某一项长度超规格的
+        // const _group = [];
+        // group.forEach((item) => {
+        //   if (this.sumLength(item) <= typeArr[typeArr.length - 1]) {
+        //     _group.push(item);
+        //   }
+        // });
+        console.log(2222, group);
         // 从这个group中任选maxNumber个数组，再找出其中涵盖所有list，并且长度符合要求的解
         // maxNumber项合起来应与全部下料相同
         // 如上面找不到解，需要任选maxNumber+1个数组，重复求解
         for (let n = minNumber; n <= maxNumber + 1; n++) {
-          totalSamples = this.getTotalSample(_group, n, _list);
+          totalSamples = this.getTotalSample(group, n, _list);
           if (totalSamples.length === 0) {
             continue;
           } else {
@@ -289,7 +289,7 @@ Page({
 
   // 获取任选n个解法数量
   getTotalSample(group, number, list) {
-    const totalSamples = this.getSamplesFromGroup(group, 0, [], number, number);
+    const totalSamples = this.getSamplesFromGroup(group, 0, [], number, number, list);
     console.log(3333, totalSamples);
     const _totalSample = [];
     for (let j = 0; j < totalSamples.length; j++) {
@@ -371,8 +371,9 @@ Page({
     @param result 遍历存储最终结果的地方
     @param cuont 遍历辅助索引值
     @param NUM 取数的数量，默认为1
+    @param list not 
   */
-  getSamplesFromGroup(arr, start = 0, result = [], count, NUM = 1) {
+  getSamplesFromGroup(arr, start = 0, result = [], count, NUM = 1, list) {
     for (let i = start; i < arr.length + 1 - count; i++) {
       result[count - 1] = i;
       if (count - 1 == 0) {
@@ -381,9 +382,13 @@ Page({
           item.push(arr[result[j]]);
         }
         // console.log(item);
-        result.push(item);
+        let totalLength = 0;
+        item.forEach(arr => totalLength+=arr.length);
+        if (totalLength === list.length) {
+          result.push(item);
+        }
       } else {
-        this.getSamplesFromGroup(arr, i + 1, result, count - 1, NUM);
+        this.getSamplesFromGroup(arr, i + 1, result, count - 1, NUM, list);
       }
     }
     const _result = [];
