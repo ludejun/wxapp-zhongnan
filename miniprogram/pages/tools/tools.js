@@ -289,19 +289,34 @@ Page({
 
   // 获取任选n个解法数量
   getTotalSample(group, number, list) {
-    const totalSamples = this.getSamplesFromGroup(group, 0, [], number, number, list);
-    console.log(3333, totalSamples);
-    const _totalSample = [];
-    for (let j = 0; j < totalSamples.length; j++) {
-      let tempArr = [];
-      totalSamples[j].forEach((item, index) => {
-        tempArr = tempArr.concat(item);
-        index === (number - 1) && tempArr.sort((a, b) => a - b < 0);
-      });
-      list.length === tempArr.length && JSON.stringify(list) === JSON.stringify(tempArr) && _totalSample.push(totalSamples[j]);
+    if (true) {
+      // 计算group中每种排列的使用率
+      const sortGroup = group.map(item => [item, this.sumLength(item) / this.getSampleType(item, this.data.typeArr)]).sort((a, b) => b[1] - a[1]);
+      console.log('sortGroup', sortGroup);
+      let totleSample = [];
+      sortGroup.forEach(item => {
+        let tmpArr = totleSample.concat([]);
+        tmpArr.push(item[0]);
+        let compareArr = [];
+        tmpArr.forEach(item => item.forEach(x => compareArr.push(x)));
+        
+      })
+      return totleSample;
+    } else {
+      const totalSamples = this.getSamplesFromGroup(group, 0, [], number, number, list);
+      console.log(3333, totalSamples);
+      const _totalSample = [];
+      for (let j = 0; j < totalSamples.length; j++) {
+        let tempArr = [];
+        totalSamples[j].forEach((item, index) => {
+          tempArr = tempArr.concat(item);
+          index === (number - 1) && tempArr.sort((a, b) => a - b < 0);
+        });
+        list.length === tempArr.length && JSON.stringify(list) === JSON.stringify(tempArr) && _totalSample.push(totalSamples[j]);
+      }
+      console.log(66666, _totalSample);
+      return _totalSample;
     }
-    console.log(66666, _totalSample);
-    return _totalSample;
   },
 
   // 某一种下料方式对应规格材料及材料使用率
@@ -371,7 +386,7 @@ Page({
     @param result 遍历存储最终结果的地方
     @param cuont 遍历辅助索引值
     @param NUM 取数的数量，默认为1
-    @param list not 
+    @param list 非原算法必须，只是为了减少输出数量，提前过滤
   */
   getSamplesFromGroup(arr, start = 0, result = [], count, NUM = 1, list) {
     for (let i = start; i < arr.length + 1 - count; i++) {
@@ -420,4 +435,9 @@ Page({
     }
     return result;
   },
+
+  // 计算一个数组是否包含另一个数组，考虑数字重复的情况
+  isContain(arr1, arr2) {
+    
+  }
 })
