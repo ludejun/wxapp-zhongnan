@@ -1,6 +1,6 @@
 Page({
   data: {
-    typeArr: [650, 600, 540],
+    typeArr: [6500, 6000, 5400],
     list: [{ 'value': null, 'num': 2 }],
     finalSample: null,
     finalType: null,
@@ -289,18 +289,24 @@ Page({
 
   // 获取任选n个解法数量
   getTotalSample(group, number, list) {
-    if (true) {
+    if (group.length > 20) {
       // 计算group中每种排列的使用率
       const sortGroup = group.map(item => [item, this.sumLength(item) / this.getSampleType(item, this.data.typeArr)]).sort((a, b) => b[1] - a[1]);
       console.log('sortGroup', sortGroup);
-      let totleSample = [];
-      sortGroup.forEach(item => {
-        let tmpArr = totleSample.concat([]);
-        tmpArr.push(item[0]);
-        let compareArr = [];
-        tmpArr.forEach(item => item.forEach(x => compareArr.push(x)));
-        
-      })
+      let totleSample = [[sortGroup[0][0]], [sortGroup[1][0]], [sortGroup[2][0]]]; // 只将最高使用率前三项作为第一根下料，简化
+
+      // 开始填充totleSample其余项，使之能达到list
+      for (let i = 0; i < totleSample.length; i++) {
+        sortGroup.forEach((item, index) => {
+          let tmpArr = totleSample[i].concat([]); // 先试着将这个item加入最后totalSample看是否都在list中
+          tmpArr.push(item[0]);
+          let compareArr = []; // tmpArr的延展一位数组
+          tmpArr.forEach(item => item.forEach(x => compareArr.push(x)));
+          this.isContain(list, compareArr) && totleSample[i].push(item[0]);
+        });
+      }
+     
+      console.log('simple', totleSample);
       return totleSample;
     } else {
       const totalSamples = this.getSamplesFromGroup(group, 0, [], number, number, list);
@@ -438,6 +444,19 @@ Page({
 
   // 计算一个数组是否包含另一个数组，考虑数字重复的情况
   isContain(arr1, arr2) {
-    
+    if (arr2.length > arr1.length) {
+      return false;
+    }
+    let resetArr = arr1.concat([]);
+    arr2.forEach(item => {
+      if (resetArr.indexOf(item) >= 0) {
+        resetArr.splice(resetArr.indexOf(item), 1);
+      }
+    });
+
+    if (resetArr.length === arr1.length - arr2.length) {
+      return true;
+    }
+    return false;
   }
 })

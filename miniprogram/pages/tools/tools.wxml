@@ -1,14 +1,14 @@
 <!--index.wxml-->
 <view class="container">
   <view class="type-container">
-    <label>型材规格（种类/cm）：</label>
+    <label>型材规格（种类/mm）：</label>
     <view wx:for="{{typeArr}}" wx:key="{{index}}" class="type-input">
       <input value="{{item}}" type="number" bindblur="onTypeChange" data-no="{{index}}"></input>
       <view data-no="{{index}}" bindtap="onTypeDeleteClick" class="process-button">-</view>
     </view>
     <!-- <input value="6" type="digit"></input> -->
 
-    <label>下料尺寸（cm）：</label><label style="margin-left: 100rpx;">数量（根）：</label>
+    <label>下料尺寸（mm）：</label><label style="margin-left: 100rpx;">数量（根）：</label>
     <view class="sample-container" wx:for="{{list}}" wx:key="{{index}}">
       <input type="number" placeholder="输入下料长度" bindinput="onSampleInput" data-no="{{index}}" placeholder-style="font-size: 18rpx;" value="{{item.value}}"></input>
       <text>X</text>
